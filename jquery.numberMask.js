@@ -23,8 +23,28 @@ $.fn.numberMask = function (options) {
         },
         onChangeInput = function (e, afterPoint) {
             var input = $(e.currentTarget);
-            if (input.val() != '') {
-                input.val(parseFloat(input.val()).toFixed(afterPoint));
+            var value = input.val() + '';
+            if (value != '') {
+                var s = value.split(".");
+                var result = s[0];
+                if (s.length > 1) {
+                    result = result + ".";
+                    var sizeAfterDecimal = s[1].length;
+                    if (sizeAfterDecimal <= afterPoint) {
+                        result = result + s[1];
+                        var noOfZeros = afterPoint - sizeAfterDecimal;
+                        for (i = 0; i < noOfZeros ; i++) {
+                            result = result + "0";
+                        }
+                    }
+                } else if (s.length == 1) {
+                    result = result + ".";
+                    for (i = 0; i < afterPoint ; i++) {
+                            result = result + "0";
+                     }
+                }
+
+                input.val(parseFloat(result).toFixed(afterPoint));
             } else {
                 input.val('');
             }
